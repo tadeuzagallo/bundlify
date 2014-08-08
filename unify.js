@@ -10,7 +10,7 @@ var translations = {};
 var output = false;
 
 if (!entry) {
-  console.log('Usage: planify entry_point.js');
+  console.log('Usage: unify entry_point.js');
 }
 
 var argc = process.argv.length;
