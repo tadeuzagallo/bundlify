@@ -7,6 +7,7 @@ var path = require('path');
 
 var entry = process.argv[2];
 var translations = {};
+var output = false;
 
 if (!entry) {
   console.log('Usage: planify entry_point.js');
@@ -16,7 +17,11 @@ var argc = process.argv.length;
 if (argc > 3) {
   for (var i = 3; i < argc; i++) {
     var t = process.argv[i].split(':');
-    translations[t[0]] = t[1];
+    if (t[0]) {
+      translations[t[0]] = t[1];
+    } else {
+      output = t[1];
+    }
   }
 }
 
@@ -121,32 +126,28 @@ File.readDeps(entry, function () {
 
 File.render = function (filename, index, content) {
       content = content.replace(File.requireRegex, function (all, $1, $2) {
-        return translations[$2] || Utils.convertFileName(path.join(path.dirname(filename), $2));
+        return translations[$2] ? 'this.' + translations[$2] : Utils.convertFileName(path.join(path.dirname(filename), $2));
       });
 
       if (index < File.deps.length - 1) {
-        content = File.wrap(filename, content);
+        content = 'var ' + Utils.convertFileName(filename) + '=' + File.wrap(content);
       }
 
       File.deps[index] = content;
 };
 
-File.wrap = function (filename, content) {
-  return 'var ' + Utils.convertFileName(filename) + ' = ' +
-    '(function(module){\n' +
+File.wrap = function (content) {
+  return '(function(module){\n' +
       Utils.indent(
         content + '\n' +
         'return module.exports;'
       ) + '\n' +
-    '})({});';
+    '}).call(this, {});';
 };
 
 File.close = function () {
   console.log(
-    '(function (module) {\n' +
-      Utils.indent(
-        File.deps.join('\n\n') + '\n' +
-        'return module.exports;'
-      ) + '\n' +
-    '})({});');
+    (output ? 'this.' + output + ' = ' : '') +
+    File.wrap(File.deps.join('\n\n'))
+  );
 };
