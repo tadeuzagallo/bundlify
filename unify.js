@@ -130,7 +130,7 @@ File.render = function (filename, index, content) {
       });
 
       if (index < File.deps.length - 1) {
-        content = 'var ' + Utils.convertFileName(filename) + '=' + File.wrap(content);
+        content = 'var ' + Utils.convertFileName(filename) + ' = ' + File.wrap(content);
       }
 
       File.deps[index] = content;
