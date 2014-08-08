@@ -29,7 +29,7 @@ var Utils = {
   indentationSize: 2,
   convertFileName: function (filename) {
     return 'Module$' + filename.replace(/^\.\//, '')
-      .replace(/(?:\/|\|)(.)/g, function (all, $1){
+      .replace(/(?:\/|_)(.)/g, function (all, $1){
         return $1.toUpperCase();
       }).replace(/\.js$/, '');
   },
