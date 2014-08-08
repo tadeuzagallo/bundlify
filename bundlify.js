@@ -137,7 +137,7 @@ File.render = function (filename, index, content) {
 };
 
 File.wrap = function (content) {
-  return '(function(module){\n' +
+  return '(function (module){\n' +
       Utils.indent(
         content + '\n' +
         'return module.exports;'

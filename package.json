@@ -1,6 +1,6 @@
 {
   "name": "bundlify",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Load all script local depencies on its bundle",
   "main": "bundlify.js",
   "scripts": {
