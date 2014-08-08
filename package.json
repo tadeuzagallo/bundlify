@@ -1,0 +1,26 @@
+{
+  "name": "bundlify",
+  "version": "0.0.0",
+  "description": "Load all script local depencies on its bundle",
+  "main": "bundlify.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/tadeuzagallo/bundlify"
+  },
+  "keywords": [
+    "bundle",
+    "require",
+    "browser",
+    "client",
+    "browserify"
+  ],
+  "author": "Tadeu Zagallo <tadeuzagallo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tadeuzagallo/bundlify/issues"
+  },
+  "homepage": "https://github.com/tadeuzagallo/bundlify"
+}
