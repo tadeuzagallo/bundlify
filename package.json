@@ -17,6 +17,9 @@
     "client",
     "browserify"
   ],
+  "bin": {
+    "bundlify": "bundlify.js"
+  },
   "author": "Tadeu Zagallo <tadeuzagallo@gmail.com>",
   "license": "MIT",
   "bugs": {
