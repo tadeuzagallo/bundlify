@@ -1,6 +1,9 @@
+#!/usr/bin/env node
+
 'use strict';
 
 var fs = require('fs');
+var path = require('path');
 
 var entry = process.argv[2];
 
@@ -12,7 +15,7 @@ var Utils = {
   indentationSize: 2,
   convertFileName: function (filename) {
     return 'Module$' + filename.replace(/^\.\//, '')
-      .replace(/\/(.)/, function (all, $1){
+      .replace(/\/(.)/g, function (all, $1){
         return $1.toUpperCase();
       }).replace(/\.js$/, '');
   },
@@ -27,9 +30,9 @@ var Utils = {
     fs.readFile(filename, function (err, content) {
       if (err) {
         throw err;
+      } else {
+        success(content);
       }
-
-      success(content);
     });
   },
   indent: function (text) {
@@ -61,11 +64,16 @@ File.readDeps = function (filename, cb) {
   var processed = 0;
   Utils.readFile(filename, function (content) {
     content.toString().replace(File.requireRegex, function (all, $1, $2) {
+      if (!/^\.\//.test($2)) {
+        return $2;
+      }
+
+      var depName = Utils.normalize(path.join(path.dirname(filename), $2));
       var index;
-      $2 = Utils.normalize($2);
+
       found += 1;
 
-      if (~(index = File.deps.indexOf($2))) {
+      if ((index = File.deps.indexOf(depName)) !== -1) {
         var index2 = File.deps.indexOf(filename);
         if (index2 < index) {
           File.deps.splice(index2, 1);
@@ -73,9 +81,9 @@ File.readDeps = function (filename, cb) {
         }
         ++processed;
       } else {
-        File.deps.unshift($2);
+        File.deps.unshift(depName);
 
-        File.readDeps($2, function () {
+        File.readDeps(depName, function () {
           if (++processed === found) {
             cb(File.deps);
           }
